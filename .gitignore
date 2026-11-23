@@ -1,0 +1,20 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+
+# Build output and Python caches
+build/
+__pycache__/
+
+# Local secrets and credentials
+.env
+.env.*
+*.pem
+.aws/
+
+# OS / editor
+.DS_Store
+.vscode/

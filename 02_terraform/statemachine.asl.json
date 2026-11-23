@@ -1,0 +1,71 @@
+{
+  "Comment": "Route purchases and refunds to separate Lambdas",
+  "QueryLanguage": "JSONPath",
+  "StartAt": "ProcessTransaction",
+  "TimeoutSeconds": 600,
+  "States": {
+    "ProcessTransaction": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.TransactionType",
+          "StringEquals": "REFUND",
+          "Next": "ProcessRefund"
+        },
+        {
+          "Variable": "$.TransactionType",
+          "StringEquals": "PURCHASE",
+          "Next": "ProcessPurchase"
+        }
+      ]
+    },
+    "ProcessRefund": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "${refund_arn}:$LATEST"
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
+        }
+      ],
+      "End": true
+    },
+    "ProcessPurchase": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "${purchase_arn}:$LATEST"
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
+        }
+      ],
+      "End": true
+    }
+  }
+}
