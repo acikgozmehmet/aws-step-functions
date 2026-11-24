@@ -22,3 +22,9 @@ Notes for the [AWS Simplified Step Functions playlist](https://www.youtube.com/p
 | [16](16_AWS_Step_Functions_Callback_with_Lambda_Study_Notes.md) | Callbacks with task tokens |
 | [17](17_AWS_Step_Functions_Introduction_Study_Notes.md) | Course introduction: use cases, disadvantages, alternatives |
 | [18](18_AWS_Step_Functions_Redrive_Study_Notes.md) | Redrive a failed execution |
+
+Extra video, from the DataEng Uncomplicated channel:
+
+| # | Topic |
+|---|---|
+| [19](19_AWS_Step_Functions_Trigger_from_SQS_Study_Notes.md) | Start an execution for each SQS message: Lambda trigger, or EventBridge Pipes with no code |
