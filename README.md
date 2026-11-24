@@ -1,6 +1,6 @@
 # AWS Step Functions study notes
 
-Study notes and hands-on labs for AWS Step Functions, following the 18-video [AWS Simplified Step Functions playlist](https://www.youtube.com/playlist?list=PL9nWRykSBSFgQrO66TmO1vHFP6yuPF5G-).
+Study notes and hands-on labs for AWS Step Functions, following the 18-video [AWS Simplified Step Functions playlist](https://www.youtube.com/playlist?list=PL9nWRykSBSFgQrO66TmO1vHFP6yuPF5G-), plus one extra video from DataEng Uncomplicated (19).
 
 | Folder | Contents |
 |---|---|
@@ -13,7 +13,7 @@ Study notes and hands-on labs for AWS Step Functions, following the 18-video [AW
 - **Service integrations:** Lambda, SQS, SNS, DynamoDB (02 to 05, 13)
 - **Flow control:** Map, Distributed Map over S3, Wait, nested workflows, callbacks (07, 08, 14, 15, 16)
 - **Errors and recovery:** retries, compensation (saga), redrive (05, 12, 18)
-- **Starting workflows from code:** Lambda and boto3 (06)
+- **Starting workflows:** from Lambda and boto3, from an SQS queue, with EventBridge Pipes (06, 19)
 
 ## What each note contains
 
@@ -30,4 +30,4 @@ The state machine definitions pass AWS's `ValidateStateMachineDefinition`. Their
 - Account IDs in the notes are the placeholder `123456789012`. No credentials are stored here; the commands use your own AWS CLI profile.
 - Python scripts run with [uv](https://docs.astral.sh/uv/): `uv run script.py`.
 
-Not affiliated with AWS or the AWS Simplified channel.
+Not affiliated with AWS, the AWS Simplified channel or DataEng Uncomplicated.
