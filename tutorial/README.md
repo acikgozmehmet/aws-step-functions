@@ -23,8 +23,10 @@ Notes for the [AWS Simplified Step Functions playlist](https://www.youtube.com/p
 | [17](17_AWS_Step_Functions_Introduction_Study_Notes.md) | Course introduction: use cases, disadvantages, alternatives |
 | [18](18_AWS_Step_Functions_Redrive_Study_Notes.md) | Redrive a failed execution |
 
-Extra video, from the DataEng Uncomplicated channel:
+Extra videos, from other channels:
 
-| # | Topic |
-|---|---|
-| [19](19_AWS_Step_Functions_Trigger_from_SQS_Study_Notes.md) | Start an execution for each SQS message: Lambda trigger, or EventBridge Pipes with no code |
+| # | Channel | Topic |
+|---|---|---|
+| [19](19_AWS_Step_Functions_Trigger_from_SQS_Study_Notes.md) | DataEng Uncomplicated | Start an execution for each SQS message: Lambda trigger, or EventBridge Pipes with no code |
+| [20](20_Amazon_EventBridge_Overview_Study_Notes.md) | AWS Certified Security – Specialty (SCS-C03) course | Amazon EventBridge basics and a console lab: GuardDuty finding to an SNS email via an input transformer — documents Step Functions as a supported GuardDuty/EventBridge target |
+| [21](21_S3_Multipart_Upload_Study_Notes.md) | Rahul Saxena | S3 multipart upload and presigned URLs for resumable browser uploads — general system design, not Step Functions; includes a sketch of orchestrating the missing post-upload scan step with a state machine |

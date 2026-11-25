@@ -1,11 +1,12 @@
 # AWS Step Functions study notes
 
-Study notes and hands-on labs for AWS Step Functions, following the 18-video [AWS Simplified Step Functions playlist](https://www.youtube.com/playlist?list=PL9nWRykSBSFgQrO66TmO1vHFP6yuPF5G-), plus one extra video from DataEng Uncomplicated (19).
+Study notes and hands-on labs for AWS Step Functions, following the 18-video [AWS Simplified Step Functions playlist](https://www.youtube.com/playlist?list=PL9nWRykSBSFgQrO66TmO1vHFP6yuPF5G-), plus three extra videos: triggering a workflow from SQS (19, DataEng Uncomplicated), an Amazon EventBridge primer using GuardDuty findings (20, AWS Certified Security – Specialty course), and S3 multipart upload design (21, general system design, loosely related).
 
 | Folder | Contents |
 |---|---|
 | [`tutorial/`](tutorial/) | One study note per video, in playlist order. Start with the [index](tutorial/README.md). |
 | [`02_terraform/`](02_terraform/) | The Lambda lab from note 02 rebuilt with Terraform: two Lambda functions and a state machine. |
+| [`eventbridge/`](eventbridge/) | A standalone collection of EventBridge study notes, since EventBridge is one of the ways to start a Step Functions execution. Start with the [index](eventbridge/README.md). |
 
 ## Topics
 
