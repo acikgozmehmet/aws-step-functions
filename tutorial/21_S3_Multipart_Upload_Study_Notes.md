@@ -14,7 +14,8 @@ What was checked:
 - Presigned URL mechanics and expiration limits come from [Sharing objects with presigned URLs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html).
 - The CORS requirement for a browser to call S3 directly, and the `ExposeHeaders` mechanism, come from [Using CORS](https://docs.aws.amazon.com/AmazonS3/latest/userguide/cors.html) and [Elements of a CORS configuration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ManageCorsUsing.md). The specific claim that `ETag` isn't on the browser's default cross-origin response-header safelist is general Fetch/XHR CORS behavior (not an AWS-specific document), included here because it's the single most common real-world bug in this exact architecture.
 - The Step Functions tie-in in section 8 is this repo's own addition, not from the video; it reuses patterns already built and validated in [notes 05](05_AWS_Step_Functions_with_DynamoDB_Study_Notes.md) (retries) and [notes 12](12_AWS_Step_Functions_Serverless_Order_Workflow_Study_Notes.md) (Parallel/Catch), and the EventBridge-as-trigger material in [notes 20](20_Amazon_EventBridge_Overview_Study_Notes.md).
-- No code from the video was available to run; nothing here was executed against a real AWS account.
+- Part numbering with checksums comes from [Checking object integrity](https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity-upload.html). That `aws s3 presign` makes only `GET` URLs comes from its [CLI reference](https://docs.aws.amazon.com/cli/latest/reference/s3/presign.html).
+- No code from the video was available to run; nothing here was executed against a real AWS account. Section 7's script was run against a local S3 mock, with a stand-in for the `aws` command.
 
 ---
 
@@ -94,7 +95,7 @@ sequenceDiagram
 |---|---|---|
 | 1. Prepare | Backend | Create the upload, hand the browser an `uploadId` to remember |
 | 2. Find the chunk | Backend, asking S3 | Which part number comes next — or "none yet" for a brand-new upload |
-| 3. Get permission | Backend | A time-limited, single-use-scoped URL for exactly that one part |
+| 3. Get permission | Backend | A time-limited URL for exactly that one part. It can be reused until it expires |
 | 4. Upload the chunk | Browser directly to S3 | The only step that moves the actual file bytes; the backend never sees them |
 | 5. Complete | Backend | Tell S3 "these are all the parts, assemble the object" — **required even after every part has uploaded** |
 | 6. Resume | Browser + backend + S3 | After a dropped connection, re-derive "which part is next" instead of restarting |
@@ -162,7 +163,7 @@ The video's 10 + 10 + 5 MiB split is valid because every part is at least 5 MiB,
 | **No CORS configuration mentioned** | A browser `PUT` straight to an S3 URL from a web app's own origin is a cross-origin request. Without a CORS rule on the bucket allowing `PUT` from that origin, the browser blocks the request before it even reaches S3 — this whole design silently fails without it. | Configure a bucket CORS rule with `AllowedMethods: ["PUT"]`, `AllowedOrigins` set to your app's origin, `AllowedHeaders` covering what your SDK sends (e.g. `Content-Type`) |
 | **The video's "S3 sends an ETag in the header" step glosses over a very common bug** | `ETag` is not one of the response headers browsers expose to JavaScript by default on a cross-origin request (the Fetch/XHR safelist doesn't include it). Reading `response.headers.get('ETag')` after the `PUT` will return `null` unless the bucket's CORS rule explicitly exposes it. | Add `"ExposeHeaders": ["ETag"]` to the bucket's CORS configuration |
 | **No mention of cleaning up abandoned uploads** | A multipart upload "has no expiry; you must explicitly complete or stop" it. If a user never resumes (closes the tab for good), S3 keeps billing for the uploaded parts' storage indefinitely. | Add an `AbortIncompleteMultipartUpload` S3 Lifecycle rule (e.g. abort anything incomplete after 1-7 days); stopping an upload has no early-delete fee |
-| **Part numbers implied as strictly sequential** | In general, part numbers don't need to be consecutive — you can upload 1, 5, 14 and fill gaps later, and re-uploading a part number overwrites it | Only the newer **full object checksum** feature (`x-amz-checksum-type: FULL_OBJECT`) requires consecutive part numbers starting at 1; plain multipart upload doesn't |
+| **Part numbers implied as strictly sequential** | In general, part numbers don't need to be consecutive — you can upload 1, 5, 14 and fill gaps later, and re-uploading a part number overwrites it | Uploads that use additional checksums need consecutive part numbers starting at 1. AWS states this for [composite (part-level) checksums](https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity-upload.html), and the [multipart overview](https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html) states it for checksums generally. Numbering 1, 2, 3 is safe in every case |
 | **Pre-signed URL's permission scope implied as baked into the URL's "details"** | What a presigned URL authorizes is bounded by the IAM permissions of **whoever generated it** (the backend's own credentials/role) at the moment it was signed — it's a signed request, not a separate access grant | Give the backend's role only `s3:PutObject` scoped to the relevant key pattern, not broad bucket access |
 | **"No inline scan" is stated as a trade-off, with no concrete fix** | The architecture genuinely has no place to intercept the bytes before they land in S3 | See section 8 |
 
@@ -184,12 +185,25 @@ UPLOAD_ID=$(aws s3api create-multipart-upload --bucket "$BUCKET" --key "$KEY" \
 aws s3api list-parts --bucket "$BUCKET" --key "$KEY" --upload-id "$UPLOAD_ID"
 
 # --- Step 3: "permission" -- here, a presigned PUT URL for part 1 ---
-PRESIGNED_URL=$(aws s3 presign \
-  "s3://$BUCKET/$KEY?partNumber=1&uploadId=$UPLOAD_ID" \
-  --expires-in 900)
-# A real UploadPart presigned URL needs the SDK's generate_presigned_url("upload_part", ...);
-# `aws s3 presign` covers simple GET/HEAD/PUT object URLs, not every multipart parameter —
-# shown here only to illustrate the expiring-URL shape the video describes.
+# `aws s3 presign` can't do this: it only makes GET URLs. Sign UploadPart with an SDK.
+# boto3 takes the Region from your profile or AWS_DEFAULT_REGION (it ignores AWS_REGION);
+# it must be the bucket's Region.
+PRESIGNED_URL=$(uv run --no-project --with boto3 python - "$BUCKET" "$KEY" "$UPLOAD_ID" <<'PY'
+import sys
+
+import boto3
+from botocore.config import Config
+
+bucket, key, upload_id = sys.argv[1:]
+# SigV4, with the bucket name in the host so the URL targets the bucket's Region
+config = Config(signature_version="s3v4", s3={"addressing_style": "virtual"})
+print(boto3.client("s3", config=config).generate_presigned_url(
+    "upload_part",
+    Params={"Bucket": bucket, "Key": key, "UploadId": upload_id, "PartNumber": 1},
+    ExpiresIn=900,
+))
+PY
+)
 
 # --- Step 4: upload the part (what the browser's PUT becomes) ---
 ETAG=$(curl -sS -X PUT -T part1.bin "$PRESIGNED_URL" -D - -o /dev/null \
@@ -268,7 +282,7 @@ This isn't something the source video builds or claims — it's this repo's own 
 |---|---|
 | Max object size via multipart upload often cited as "5 TB" | Current docs state **48.8 TiB** (= 5 GiB max part size × 10,000 max parts) |
 | Multipart ETag as "MD5 of concatenated part MD5s, suffixed with part count" | Still true for the classic MD5 checksum path, but newer default checksum algorithms (e.g. CRC-64/NVME) mean AWS now states plainly the final ETag "is not necessarily an MD5 hash of the object data" |
-| Part numbers assumed sequential | Still arbitrary (1 to 10,000, any order, gaps allowed) **unless** using the newer full-object checksum feature, which requires consecutive numbering from 1 |
+| Part numbers assumed sequential | Still arbitrary (1 to 10,000, any order, gaps allowed) **unless** the upload uses additional checksums (AWS names composite ones), which require consecutive numbering from 1 |
 
 ---
 
@@ -342,7 +356,7 @@ The uploaded parts remain stored and billed, because a multipart upload never ex
 <details>
 <summary>8. Must part numbers be uploaded in strict sequential order?</summary>
 
-No, not for plain multipart upload — part numbers from 1 to 10,000 can be uploaded in any order with gaps, and re-using a part number overwrites the earlier upload of that part. Consecutive numbering starting at 1 is only required if you're using S3's full-object checksum feature.
+No, not for plain multipart upload — part numbers from 1 to 10,000 can be uploaded in any order with gaps, and re-using a part number overwrites the earlier upload of that part. Consecutive numbering starting at 1 is required when the upload uses S3's additional checksums (AWS states this for composite, or part-level, checksums).
 </details>
 
 <details>

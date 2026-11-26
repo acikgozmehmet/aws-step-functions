@@ -7,6 +7,7 @@ Study notes and hands-on labs for AWS Step Functions, following the 18-video [AW
 | [`tutorial/`](tutorial/) | One study note per video, in playlist order. Start with the [index](tutorial/README.md). |
 | [`02_terraform/`](02_terraform/) | The Lambda lab from note 02 rebuilt with Terraform: two Lambda functions and a state machine. |
 | [`eventbridge/`](eventbridge/) | A standalone collection of EventBridge study notes, since EventBridge is one of the ways to start a Step Functions execution. Start with the [index](eventbridge/README.md). |
+| [`s3-multipart-upload/`](s3-multipart-upload/) | A standalone collection of S3 multipart upload and presigned URL study notes, expanding on note 21. Start with the [index](s3-multipart-upload/README.md). |
 
 ## Topics
 
