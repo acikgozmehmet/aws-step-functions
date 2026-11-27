@@ -2,7 +2,7 @@
 
 Source: [Design a File Upload Service: Resumable, Presigned, Verified](https://www.youtube.com/watch?v=z6OPj6Ostto), Prateek Goel / GrowAsEngineers, 39:17.
 
-A system design walkthrough that starts with one upload server and breaks it with numbers. It fills the main gap in [`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md#4-etag-what-it-actually-is): that note says the final multipart `ETag` is no whole-file checksum and stops there.
+A system design walkthrough that starts with one upload server and breaks it with numbers. It fills the main gap in [note 00](00_S3_Multipart_Upload_Study_Notes.md#4-etag-what-it-actually-is): that note says the final multipart `ETag` is no whole-file checksum and stops there.
 
 The video talks about checksums in general (MD5, CRC32C, SHA-256) and says storage checks them. It never names S3's checksum headers or checksum types. That mapping, in section 7, is added here, and it changes one of the video's design decisions.
 

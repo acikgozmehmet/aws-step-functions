@@ -2,7 +2,7 @@
 
 Source: [The Last Amazon S3 Video You'll Need To Watch (Presigned URLs, Multipart Upload)](https://www.youtube.com/watch?v=yAoKmP76oL4), Milan Jovanović, 30:24. The presenter says AWS sponsored the video (00:31).
 
-This is the full-depth cross-check for [`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md). That note describes a six-step resumable upload design. This video builds most of it with a .NET minimal API and a plain HTML/JavaScript client, so the two can be compared piece by piece (section 9).
+This is the full-depth cross-check for [note 00](00_S3_Multipart_Upload_Study_Notes.md). That note describes a six-step resumable upload design. This video builds most of it with a .NET minimal API and a plain HTML/JavaScript client, so the two can be compared piece by piece (section 9).
 
 What the video covers:
 1. Bucket creation in the console, and why the object URL returns access denied.
@@ -34,7 +34,7 @@ What was checked:
 6. [CORS](#6-cors)
 7. [Multipart upload](#7-multipart-upload)
 8. [Same flow with the AWS CLI and Python](#8-same-flow-with-the-aws-cli-and-python)
-9. [Cross-check against tutorial/21](#9-cross-check-against-tutorial21)
+9. [Cross-check against note 00](#9-cross-check-against-note-00)
 10. [Corrections and gaps](#10-corrections-and-gaps)
 11. [Gotchas](#11-gotchas)
 12. [Cheat sheet](#12-cheat-sheet)
@@ -584,9 +584,9 @@ rm -f big.bin cors.json
 
 ---
 
-## 9. Cross-check against tutorial/21
+## 9. Cross-check against note 00
 
-| Topic | `tutorial/21` | This video | Verdict from AWS docs |
+| Topic | Note 00 | This video | Verdict from AWS docs |
 |---|---|---|---|
 | Three-call flow plus presigned part URLs | Described | Built | Agree |
 | CORS needs `PUT` and the app's origin | Section 6 | Shown failing, then fixed | Agree |
@@ -599,7 +599,7 @@ rm -f big.bin cors.json
 | Presigning from the CLI | Used `aws s3 presign`, then `PUT` to it (since fixed) | Uses the SDK | The command makes `GET` URLs only |
 | Consecutive part numbers | Tied the rule to full object checksums only (since fixed) | Not covered | Stated for composite (part-level) checksums, and on the overview page for multipart uploads with checksums generally |
 
-The last three rows were errors in `tutorial/21` that this comparison turned up. They have been corrected there. For part numbers, numbering 1, 2, 3 with no gaps is safe in every case.
+The last three rows were errors in note 00 that this comparison turned up. They have been corrected there. For part numbers, numbering 1, 2, 3 with no gaps is safe in every case.
 
 ---
 

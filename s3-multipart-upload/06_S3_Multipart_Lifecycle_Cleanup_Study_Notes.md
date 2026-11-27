@@ -2,7 +2,7 @@
 
 Source: [Amazon S3 Lifecycle Management Tutorial | Clean Up Multipart Uploads & Reduce Costs](https://www.youtube.com/watch?v=PnZkMXj8SBI), IAAS Academy, 16:13.
 
-[`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md#6-what-the-video-leaves-out) warns that abandoned multipart uploads keep billing and suggests an `AbortIncompleteMultipartUpload` rule, but never builds one. This video does, in the console, after a longer introduction to lifecycle rules in general.
+[Note 00](00_S3_Multipart_Upload_Study_Notes.md#6-what-the-video-leaves-out) warns that abandoned multipart uploads keep billing and suggests an `AbortIncompleteMultipartUpload` rule, but never builds one. This video does, in the console, after a longer introduction to lifecycle rules in general.
 
 What the video covers:
 1. Transition and expiration actions, current and noncurrent versions, filters (00:00-04:44).
@@ -30,7 +30,7 @@ What was checked:
 4. [Incomplete multipart uploads](#4-incomplete-multipart-uploads)
 5. [The rule, in console and JSON](#5-the-rule-in-console-and-json)
 6. [Same setup with the AWS CLI](#6-same-setup-with-the-aws-cli)
-7. [Checking tutorial/21's lifecycle example](#7-checking-tutorial21s-lifecycle-example)
+7. [Checking note 00's lifecycle example](#7-checking-note-00s-lifecycle-example)
 8. [Corrections and gaps](#8-corrections-and-gaps)
 9. [Gotchas](#9-gotchas)
 10. [Cheat sheet](#10-cheat-sheet)
@@ -255,9 +255,9 @@ The read fails with an error if the bucket has no configuration yet; in that cas
 
 ---
 
-## 7. Checking tutorial/21's lifecycle example
+## 7. Checking note 00's lifecycle example
 
-`tutorial/21` section 7 uses this rule: ID `AbortStaleMultipartUploads`, `"Filter": {}`, `DaysAfterInitiation: 3`.
+Note 00 section 7 uses this rule: ID `AbortStaleMultipartUploads`, `"Filter": {}`, `DaysAfterInitiation: 3`.
 
 | Claim | Result |
 |---|---|

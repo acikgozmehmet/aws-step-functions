@@ -29,4 +29,4 @@ Extra videos, from other channels:
 |---|---|---|
 | [19](19_AWS_Step_Functions_Trigger_from_SQS_Study_Notes.md) | DataEng Uncomplicated | Start an execution for each SQS message: Lambda trigger, or EventBridge Pipes with no code |
 | [20](20_Amazon_EventBridge_Overview_Study_Notes.md) | AWS Certified Security – Specialty (SCS-C03) course | Amazon EventBridge basics and a console lab: GuardDuty finding to an SNS email via an input transformer — documents Step Functions as a supported GuardDuty/EventBridge target |
-| [21](21_S3_Multipart_Upload_Study_Notes.md) | Rahul Saxena | S3 multipart upload and presigned URLs for resumable browser uploads — general system design, not Step Functions; includes a sketch of orchestrating the missing post-upload scan step with a state machine |
+| [21](../s3-multipart-upload/00_S3_Multipart_Upload_Study_Notes.md) | Rahul Saxena | Moved to [`s3-multipart-upload/`](../s3-multipart-upload/README.md) as note 00. S3 multipart upload and presigned URLs for resumable browser uploads — general system design, not Step Functions; includes a sketch of orchestrating the missing post-upload scan step with a state machine |

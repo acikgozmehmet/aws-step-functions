@@ -2,7 +2,7 @@
 
 Source: [AWS S3 Tutorial: Multi-part upload with the AWS CLI](https://www.youtube.com/watch?v=G4NrNGhfim8), CloudYeti / Practical AI Engineering, 22:12.
 
-The video does a multipart upload by hand: split an 86 MB file into nine pieces, start the upload, send each part with `aws s3api upload-part`, check them with `list-parts`, and complete. It follows an AWS how-to page for the command shapes. It is the closest thing in this repo to a real run of the commands in [`tutorial/21` section 7](../tutorial/21_S3_Multipart_Upload_Study_Notes.md#7-same-idea-with-the-aws-cli) (checked in section 8 below).
+The video does a multipart upload by hand: split an 86 MB file into nine pieces, start the upload, send each part with `aws s3api upload-part`, check them with `list-parts`, and complete. It follows an AWS how-to page for the command shapes. It is the closest thing in this repo to a real run of the commands in [note 00 section 7](00_S3_Multipart_Upload_Study_Notes.md#7-same-idea-with-the-aws-cli) (checked in section 8 below).
 
 What was checked:
 - Part limits: [multipart upload limits](https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html).
@@ -25,7 +25,7 @@ What was checked:
 5. [Complete the upload](#5-complete-the-upload)
 6. [The whole run as one script](#6-the-whole-run-as-one-script)
 7. [The shortcut: aws s3 cp](#7-the-shortcut-aws-s3-cp)
-8. [Checking tutorial/21 section 7](#8-checking-tutorial21-section-7)
+8. [Checking note 00 section 7](#8-checking-note-00-section-7)
 9. [Corrections and gaps](#9-corrections-and-gaps)
 10. [Gotchas](#10-gotchas)
 11. [Cheat sheet](#11-cheat-sheet)
@@ -274,9 +274,9 @@ AWS CLI v2 also calculates a checksum for uploads by default (CRC64NVME), which 
 
 ---
 
-## 8. Checking tutorial/21 section 7
+## 8. Checking note 00 section 7
 
-| Command in `tutorial/21` | Against this video and the docs |
+| Command in note 00 | Against this video and the docs |
 |---|---|
 | `create-multipart-upload ... --query UploadId` | Same call as the video |
 | `list-parts` | Same call as the video |

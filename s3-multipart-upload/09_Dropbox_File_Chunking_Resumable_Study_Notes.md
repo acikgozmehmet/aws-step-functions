@@ -4,7 +4,7 @@ Source: [Dropbox System Design Interview | File Chunking & Resumable Uploads (Ex
 
 A system design interview walkthrough, not an S3 tutorial. These notes take the **upload and chunking** parts. Sharing, sync and general scaling are listed as out of scope in section 6.
 
-Read [`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md#2-the-six-step-design) first: it covers the S3 version of prepare, sign, upload, complete and resume.
+Read [note 00](00_S3_Multipart_Upload_Study_Notes.md#2-the-six-step-design) first: it covers the S3 version of prepare, sign, upload, complete and resume.
 
 Each point is marked as one of two kinds:
 

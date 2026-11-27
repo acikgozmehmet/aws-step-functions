@@ -2,7 +2,7 @@
 
 Source: [S3 multipart upload using boto3 vs simple upload](https://www.youtube.com/watch?v=na192OdpiEM), Saadi AWS, 10:06.
 
-The video uploads two files with a boto3 script configured for multipart, times them, and compares with a console upload. [`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md#3-mapping-the-design-onto-real-s3-apis) documents the **low-level** calls. This video uses boto3's **high-level** transfer, which makes those calls for you.
+The video uploads two files with a boto3 script configured for multipart, times them, and compares with a console upload. [Note 00](00_S3_Multipart_Upload_Study_Notes.md#3-mapping-the-design-onto-real-s3-apis) documents the **low-level** calls. This video uses boto3's **high-level** transfer, which makes those calls for you.
 
 What was checked:
 - Limits: [multipart limits](https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html).

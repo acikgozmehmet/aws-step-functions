@@ -2,7 +2,7 @@
 
 Source: [Design Dropbox or Google Drive w/ an Ex-Meta Staff Engineer](https://www.youtube.com/watch?v=_UZ1ngy-kOI), Evan, Hello Interview, 58:08.
 
-Scoped tightly to **uploading and chunking** (mainly 29:02-45:36). Everything else is listed in section 7 and was not checked. The design is close to [note 09](09_Dropbox_File_Chunking_Resumable_Study_Notes.md); this note concentrates on what is different or goes further. For the S3 version of the flow, read [`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md#2-the-six-step-design) first.
+Scoped tightly to **uploading and chunking** (mainly 29:02-45:36). Everything else is listed in section 7 and was not checked. The design is close to [note 09](09_Dropbox_File_Chunking_Resumable_Study_Notes.md); this note concentrates on what is different or goes further. For the S3 version of the flow, read [note 00](00_S3_Multipart_Upload_Study_Notes.md#2-the-six-step-design) first.
 
 Each correction is marked **AWS fact** (checked against documentation) or **design view** (judgement that documentation can't confirm).
 
