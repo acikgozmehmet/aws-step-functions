@@ -4,7 +4,7 @@ Source: [Amazon S3 Event Notifications with Amazon EventBridge - Step By Step Tu
 
 The video builds: upload a file to a specific folder in an S3 bucket → an EventBridge rule matches it → an email goes out via SNS, first with a plain SNS topic, then repeated with an **encrypted** SNS topic to show the extra KMS permission that requires.
 
-This is the missing first half of the sketch in [tutorial/21 §8](../tutorial/21_S3_Multipart_Upload_Study_Notes.md#8-beyond-the-video-orchestrating-the-missing-scan-step-with-step-functions), which assumed "S3 ObjectCreated event → EventBridge rule → Step Functions" already works and only detailed the Step Functions side. This note covers how the S3-to-EventBridge half is actually configured and shaped. See also [eventbridge/02](02_EventBridge_Integrating_With_Step_Functions_Study_Notes.md) for the core rule/target workflow this reuses with a different source.
+This is the missing first half of the sketch in [S3 note 00 §8](../s3-multipart-upload/00_S3_Multipart_Upload_Study_Notes.md#8-beyond-the-video-orchestrating-the-missing-scan-step-with-step-functions), which assumed "S3 ObjectCreated event → EventBridge rule → Step Functions" already works and only detailed the Step Functions side. This note covers how the S3-to-EventBridge half is actually configured and shaped. See also [eventbridge/02](02_EventBridge_Integrating_With_Step_Functions_Study_Notes.md) for the core rule/target workflow this reuses with a different source.
 
 What was checked:
 - Enabling EventBridge on a bucket, the full list of S3 event types it sends, and the exact event envelope/`detail` shape were checked against AWS's [Using EventBridge](https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventBridge.html), [Enabling Amazon EventBridge](https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-event-notifications-eventbridge.html), and [EventBridge event message structure](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ev-events.html) pages.
@@ -93,7 +93,7 @@ A real `Object Created` envelope:
 }
 ```
 
-The direct tie to [tutorial/21](../tutorial/21_S3_Multipart_Upload_Study_Notes.md): when a multipart upload finishes, S3 emits this exact same `Object Created` event, with `detail.reason` set to **`CompleteMultipartUpload`** instead of `PutObject`. A rule can filter on that field specifically if you only want to react to large, chunked uploads rather than small single-request ones.
+The direct tie to [S3 note 00](../s3-multipart-upload/00_S3_Multipart_Upload_Study_Notes.md): when a multipart upload finishes, S3 emits this exact same `Object Created` event, with `detail.reason` set to **`CompleteMultipartUpload`** instead of `PutObject`. A rule can filter on that field specifically if you only want to react to large, chunked uploads rather than small single-request ones.
 
 ---
 
@@ -142,7 +142,7 @@ This matches AWS's general target-permissions guidance verbatim: *"If your targe
 2. **Allow ~5 minutes after enabling** before events start flowing — a quiet failure if you test immediately.
 3. **Object key filtering is a general EventBridge operator (`prefix`/`suffix`/`wildcard`), not an S3-specific setting** — the console's pattern-form UI doesn't expose it; you add it by hand-editing the generated JSON, exactly as the video does.
 4. **The default SNS-managed key silently blocks EventBridge.** There's no error until you notice no notifications ever arrive for an encrypted topic using `aws/sns`; switch to a customer-managed key with an explicit policy statement for `events.amazonaws.com`.
-5. **A `CompleteMultipartUpload` finish and a plain `PutObject` produce the identical `detail-type` (`Object Created`)** — distinguish them with `detail.reason`, not `detail-type`, if you need multipart-specific handling (relevant to tutorial/21).
+5. **A `CompleteMultipartUpload` finish and a plain `PutObject` produce the identical `detail-type` (`Object Created`)** — distinguish them with `detail.reason`, not `detail-type`, if you need multipart-specific handling (relevant to S3 note 00).
 6. **FIFO SNS topics can't have email subscribers.** Use Standard if a human needs to read the notification directly.
 
 ---
@@ -186,7 +186,7 @@ The AWS-managed `aws/sns` key's policy doesn't grant other services access to it
 </details>
 
 <details>
-<summary>4. A multipart upload (per tutorial/21) completes. What `detail-type` does EventBridge see, and how do you distinguish it from a simple single-request upload?</summary>
+<summary>4. A multipart upload (per S3 note 00) completes. What `detail-type` does EventBridge see, and how do you distinguish it from a simple single-request upload?</summary>
 
 Both produce `detail-type: "Object Created"`. The difference is in `detail.reason`: `CompleteMultipartUpload` for the multipart finish, versus `PutObject`/`POST Object`/`CopyObject` for other creation paths.
 </details>

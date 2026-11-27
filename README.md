@@ -1,13 +1,13 @@
 # AWS Step Functions study notes
 
-Study notes and hands-on labs for AWS Step Functions, following the 18-video [AWS Simplified Step Functions playlist](https://www.youtube.com/playlist?list=PL9nWRykSBSFgQrO66TmO1vHFP6yuPF5G-), plus three extra videos: triggering a workflow from SQS (19, DataEng Uncomplicated), an Amazon EventBridge primer using GuardDuty findings (20, AWS Certified Security – Specialty course), and S3 multipart upload design (21, general system design, loosely related).
+Study notes and hands-on labs for AWS Step Functions, following the 18-video [AWS Simplified Step Functions playlist](https://www.youtube.com/playlist?list=PL9nWRykSBSFgQrO66TmO1vHFP6yuPF5G-), plus two extra videos: triggering a workflow from SQS (19, DataEng Uncomplicated) and an Amazon EventBridge primer using GuardDuty findings (20, AWS Certified Security – Specialty course). A loosely related third one, on S3 multipart upload design (formerly note 21), is in [`s3-multipart-upload/`](s3-multipart-upload/).
 
 | Folder | Contents |
 |---|---|
 | [`tutorial/`](tutorial/) | One study note per video, in playlist order. Start with the [index](tutorial/README.md). |
 | [`02_terraform/`](02_terraform/) | The Lambda lab from note 02 rebuilt with Terraform: two Lambda functions and a state machine. |
 | [`eventbridge/`](eventbridge/) | A standalone collection of EventBridge study notes, since EventBridge is one of the ways to start a Step Functions execution. Start with the [index](eventbridge/README.md). |
-| [`s3-multipart-upload/`](s3-multipart-upload/) | A standalone collection of S3 multipart upload and presigned URL study notes, expanding on note 21. Start with the [index](s3-multipart-upload/README.md). |
+| [`s3-multipart-upload/`](s3-multipart-upload/) | S3 multipart upload and presigned URL study notes, with a [Python example and tests](s3-multipart-upload/code/README.md). Start with the [index](s3-multipart-upload/README.md). |
 
 ## Topics
 

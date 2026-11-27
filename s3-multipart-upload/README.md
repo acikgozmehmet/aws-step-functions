@@ -1,9 +1,12 @@
 # Amazon S3 multipart upload study notes
 
-A standalone collection on S3 multipart upload and presigned URLs, separate from the numbered [`tutorial/`](../tutorial/) series. Each note builds on [`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md).
+A standalone collection on S3 multipart upload and presigned URLs. Start with [note 00](00_S3_Multipart_Upload_Study_Notes.md), which the other notes build on. For a runnable Python version of its design, with end-to-end tests, see [`code/`](code/README.md).
+
+Note 00 was note 21 of the [`tutorial/`](../tutorial/) series.
 
 | # | Topic | Source | Depth |
 |---|---|---|---|
+| [00](00_S3_Multipart_Upload_Study_Notes.md) | **Resumable upload design with presigned URLs (start here)** | Rahul Saxena | Base note |
 | [01](01_S3_Multipart_Comprehensive_Study_Notes.md) | **.NET SDK, presigned URLs, CORS and multipart end to end** | Milan Jovanović | **Full (pick)** |
 | [02](02_S3_Multipart_Presigned_Upload_Study_Notes.md) | Express backend, size switch, parallel parts, App Runner | Chandan Maurya | Standard |
 | [03](03_S3_Multipart_AWS_CLI_Study_Notes.md) | **Multipart upload by hand with the AWS CLI** | CloudYeti | **Full (pick)** |
@@ -17,20 +20,20 @@ A standalone collection on S3 multipart upload and presigned URLs, separate from
 
 ## The four picks
 
-- **01** is the broadest single walkthrough, compared with `tutorial/21` topic by topic.
-- **03** shows the CLI calls that `tutorial/21` only listed.
-- **06** builds the abort rule that `tutorial/21` recommended.
-- **08** covers whole-file verification, which `tutorial/21` left open.
+- **01** is the broadest single walkthrough, compared with note 00 topic by topic.
+- **03** shows the CLI calls that note 00 only listed.
+- **06** builds the abort rule that note 00 recommended.
+- **08** covers whole-file verification, which note 00 left open.
 
-## Corrections made to tutorial/21
+## Corrections made to note 00
 
 Found while writing these notes and since fixed there.
 
 | Section | Said | Now says |
 |---|---|---|
 | 2 | A presigned URL is "single-use-scoped" | Reusable until it expires |
-| 7 | `aws s3 presign`, then `PUT` to the URL | Signs `upload_part` with boto3, since the command makes `GET` URLs only ([note 03](03_S3_Multipart_AWS_CLI_Study_Notes.md#8-checking-tutorial21-section-7)) |
-| 6, 10, 12 | Only full object checksums need consecutive part numbers | AWS states the requirement for composite checksums; number parts 1, 2, 3 ([note 01](01_S3_Multipart_Comprehensive_Study_Notes.md#9-cross-check-against-tutorial21)) |
+| 7 | `aws s3 presign`, then `PUT` to the URL | Signs `upload_part` with boto3, since the command makes `GET` URLs only ([note 03](03_S3_Multipart_AWS_CLI_Study_Notes.md#8-checking-note-00-section-7)) |
+| 6, 10, 12 | Only full object checksums need consecutive part numbers | AWS states the requirement for composite checksums; number parts 1, 2, 3 ([note 01](01_S3_Multipart_Comprehensive_Study_Notes.md#9-cross-check-against-note-00)) |
 
 ## What was checked
 

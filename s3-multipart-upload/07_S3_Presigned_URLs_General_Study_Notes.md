@@ -2,7 +2,7 @@
 
 Source: [Amazon S3 Presigned URLs Uploads and Downloads Tutorial](https://www.youtube.com/watch?v=V2arOZ72d6M), 14:46. The presenter gives the name Milan, and the `mjtech` bucket prefix matches [note 01](01_S3_Multipart_Comprehensive_Study_Notes.md)'s video. The video says AWS sponsored it (00:35).
 
-[`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md) only covers presigned URLs for uploading parts. This video covers the basic single-object case in both directions, **upload (`PUT`) and download (`GET`)**, from a .NET 9 web API. No multipart.
+[Note 00](00_S3_Multipart_Upload_Study_Notes.md) only covers presigned URLs for uploading parts. This video covers the basic single-object case in both directions, **upload (`PUT`) and download (`GET`)**, from a .NET 9 web API. No multipart.
 
 What was checked:
 - Signing, reuse, expiry and failure causes: [Download and upload objects with presigned URLs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html).
@@ -216,7 +216,7 @@ The video never mentions CORS, and its demo can't run into it: uploads come from
 | Page uses `fetch` or XHR to upload | Yes: `PUT`, the page's origin, the headers it sends |
 | Page needs to read `ETag` (multipart) | Also `ExposeHeaders: ["ETag"]` |
 
-So the video neither handles nor mishandles the `ExposeHeaders` problem that `tutorial/21` warns about. For a browser version of this app you would add the rule shown in [note 01 section 6](01_S3_Multipart_Comprehensive_Study_Notes.md#6-cors).
+So the video neither handles nor mishandles the `ExposeHeaders` problem that note 00 warns about. For a browser version of this app you would add the rule shown in [note 01 section 6](01_S3_Multipart_Comprehensive_Study_Notes.md#6-cors).
 
 ---
 

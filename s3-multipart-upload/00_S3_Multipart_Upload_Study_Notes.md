@@ -2,7 +2,9 @@
 
 Source: [S3 Multipart Upload & Presigned URLs Explained | Resumable Uploads](https://youtu.be/jePr5-vxj2k), presenter Rahul Saxena, about 13 minutes.
 
-This is a general system-design video, not an AWS Step Functions video, and it never mentions Step Functions or EventBridge. It's included here only loosely, as background: the video's own closing trade-off — uploading straight from the browser to S3 means **no inline virus/content scan** — is exactly the kind of multi-step, retryable post-processing problem Step Functions is built for (section 8 sketches it). The video itself frames the design as cloud-agnostic ("I'm pretty sure we will be having similar things for Azure as well as GCP"); these notes stick to the S3-specific details it demonstrates.
+A runnable Python version of this design, with tests, is in [`code/`](code/README.md).
+
+This is a general system-design video, not an AWS Step Functions video, and it never mentions Step Functions or EventBridge. It belongs to this Step Functions repository only loosely, as background: the video's own closing trade-off — uploading straight from the browser to S3 means **no inline virus/content scan** — is exactly the kind of multi-step, retryable post-processing problem Step Functions is built for (section 8 sketches it). The video itself frames the design as cloud-agnostic ("I'm pretty sure we will be having similar things for Azure as well as GCP"); these notes stick to the S3-specific details it demonstrates.
 
 What the video covers:
 1. Why large uploads use **multipart upload**: chunk a big file, upload chunks independently, resume only the missing ones instead of restarting.
@@ -13,7 +15,7 @@ What was checked:
 - S3 multipart upload's numeric limits, API flow (`CreateMultipartUpload`, `UploadPart`, `ListParts`, `CompleteMultipartUpload`), ETag behavior, and billing of incomplete uploads were checked against the current [Multipart upload limits](https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html) and [multipart upload overview](https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html) pages in the Amazon S3 User Guide.
 - Presigned URL mechanics and expiration limits come from [Sharing objects with presigned URLs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html).
 - The CORS requirement for a browser to call S3 directly, and the `ExposeHeaders` mechanism, come from [Using CORS](https://docs.aws.amazon.com/AmazonS3/latest/userguide/cors.html) and [Elements of a CORS configuration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ManageCorsUsing.md). The specific claim that `ETag` isn't on the browser's default cross-origin response-header safelist is general Fetch/XHR CORS behavior (not an AWS-specific document), included here because it's the single most common real-world bug in this exact architecture.
-- The Step Functions tie-in in section 8 is this repo's own addition, not from the video; it reuses patterns already built and validated in [notes 05](05_AWS_Step_Functions_with_DynamoDB_Study_Notes.md) (retries) and [notes 12](12_AWS_Step_Functions_Serverless_Order_Workflow_Study_Notes.md) (Parallel/Catch), and the EventBridge-as-trigger material in [notes 20](20_Amazon_EventBridge_Overview_Study_Notes.md).
+- The Step Functions tie-in in section 8 is this repo's own addition, not from the video; it reuses patterns already built and validated in [tutorial note 05](../tutorial/05_AWS_Step_Functions_with_DynamoDB_Study_Notes.md) (retries) and [tutorial note 12](../tutorial/12_AWS_Step_Functions_Serverless_Order_Workflow_Study_Notes.md) (Parallel/Catch), and the EventBridge-as-trigger material in [tutorial note 20](../tutorial/20_Amazon_EventBridge_Overview_Study_Notes.md).
 - Part numbering with checksums comes from [Checking object integrity](https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity-upload.html). That `aws s3 presign` makes only `GET` URLs comes from its [CLI reference](https://docs.aws.amazon.com/cli/latest/reference/s3/presign.html).
 - No code from the video was available to run; nothing here was executed against a real AWS account. Section 7's script was run against a local S3 mock, with a stand-in for the `aws` command.
 
@@ -254,10 +256,10 @@ flowchart LR
 
 | Piece | How this repo's existing notes already cover it |
 |---|---|
-| Trigger the workflow when the upload completes | An EventBridge rule matching S3's `Object Created` event, targeting the state machine directly — exactly the rule → target pattern in [notes 20](20_Amazon_EventBridge_Overview_Study_Notes.md#5-the-core-workflow-source-event-bus-rule-target), just with S3 instead of EC2 as the source |
-| Retry a flaky scan a few times before giving up | `Retry` with backoff, as built in [notes 05](05_AWS_Step_Functions_with_DynamoDB_Study_Notes.md) |
-| Route "infected" vs "clean" vs "scan failed" down different paths | `Choice`/`Catch`, as built in [notes 12](12_AWS_Step_Functions_Serverless_Order_Workflow_Study_Notes.md) |
-| See exactly which uploads are stuck mid-scan, without digging through logs | The execution history view, same benefit [notes 17](17_AWS_Step_Functions_Introduction_Study_Notes.md#8-why-people-like-it) describes for any Step Functions workflow |
+| Trigger the workflow when the upload completes | An EventBridge rule matching S3's `Object Created` event, targeting the state machine directly — exactly the rule → target pattern in [tutorial note 20](../tutorial/20_Amazon_EventBridge_Overview_Study_Notes.md#5-the-core-workflow-source-event-bus-rule-target), just with S3 instead of EC2 as the source |
+| Retry a flaky scan a few times before giving up | `Retry` with backoff, as built in [tutorial note 05](../tutorial/05_AWS_Step_Functions_with_DynamoDB_Study_Notes.md) |
+| Route "infected" vs "clean" vs "scan failed" down different paths | `Choice`/`Catch`, as built in [tutorial note 12](../tutorial/12_AWS_Step_Functions_Serverless_Order_Workflow_Study_Notes.md) |
+| See exactly which uploads are stuck mid-scan, without digging through logs | The execution history view, same benefit [tutorial note 17](../tutorial/17_AWS_Step_Functions_Introduction_Study_Notes.md#8-why-people-like-it) describes for any Step Functions workflow |
 
 This isn't something the source video builds or claims — it's this repo's own answer to the trade-off the video raises, included to make the note useful here rather than a pure tangent.
 

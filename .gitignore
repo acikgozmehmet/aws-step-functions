@@ -9,6 +9,10 @@ crash.log
 build/
 __pycache__/
 
+# Resume state written by s3-multipart-upload/code/upload.py
+*.upload.json
+*.upload.json.tmp
+
 # Local secrets and credentials
 .env
 .env.*

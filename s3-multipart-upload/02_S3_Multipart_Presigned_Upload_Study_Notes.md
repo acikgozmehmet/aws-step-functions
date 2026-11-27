@@ -2,7 +2,7 @@
 
 Source: [Upload Large file on AWS S3 using Multipart and Pre-signed URL](https://www.youtube.com/watch?v=dfxXEQxJPzI), Chandan Maurya, 20:24.
 
-The design is the one in [`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md#2-the-six-step-design): start, sign, upload parts, complete. It isn't repeated here. This note covers what is different in this build: a Node.js (Express) backend, a size switch between single and multipart upload, all part URLs signed at once, parallel uploads, and a deployment to AWS App Runner.
+The design is the one in [note 00](00_S3_Multipart_Upload_Study_Notes.md#2-the-six-step-design): start, sign, upload parts, complete. It isn't repeated here. This note covers what is different in this build: a Node.js (Express) backend, a size switch between single and multipart upload, all part URLs signed at once, parallel uploads, and a deployment to AWS App Runner.
 
 What was checked:
 - Part limits: [multipart limits](https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html). Expiry rules: [presigned URLs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html).

@@ -4,7 +4,7 @@ Source: [AWS S3 | Multipart Upload & Copy | Java](https://www.youtube.com/watch?
 
 > **The transcript for this video is poor.** There are no English captions. The only track is auto-generated Hindi, which renders what sounds like English speech as Devanagari text, much of it meaningless. Only the technical terms and some phrases can be recovered. "What the video covers" below is limited to those, and details such as exact method calls, bucket names and the on-screen results are missing. Check the video itself before relying on any detail attributed to it. All code here comes from AWS material or was written for this note, not from the video.
 
-[`tutorial/21`](../tutorial/21_S3_Multipart_Upload_Study_Notes.md) never covers copying with multipart. The video does, so section 3 treats `UploadPartCopy` properly.
+[Note 00](00_S3_Multipart_Upload_Study_Notes.md) never covers copying with multipart. The video does, so section 3 treats `UploadPartCopy` properly.
 
 What was checked:
 - Limits: [multipart limits](https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html).
